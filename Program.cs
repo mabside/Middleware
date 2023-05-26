@@ -10,7 +10,7 @@ var app = builder.Build();
 //Middleware1
 app.Use( async (HttpContext context, RequestDelegate next) =>
 {
-  await context.Response.WriteAsync("Welcome from ASP.NET Core App!");
+  await context.Response.WriteAsync("Middleware 1 called!");
   await next(context);
 });
 
@@ -21,13 +21,15 @@ app.Use( async (HttpContext context, RequestDelegate next) =>
   await next(context);
 });
 
-//Middleware 3
-app.UseMiddleware<MyMiddleware>();
+//Middleware 3 - Using custom middleware class
+// app.UseMiddleware<MyMiddleware>();
+// app.MyMiddleware(); // uses the extension method
+app.UseAnotherCustomMiddleware();
 
 //Middleware 4
 app.Run( async (HttpContext context) =>
 {
-  await context.Response.WriteAsync("This is my first ASP.NET Core App!\n\n");
+  await context.Response.WriteAsync("Middleware 4 called!\n\n");
 });
 
 app.Run();
