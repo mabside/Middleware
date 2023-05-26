@@ -27,9 +27,22 @@ app.Use( async (HttpContext context, RequestDelegate next) =>
 app.UseAnotherCustomMiddleware();
 
 //Middleware 4
+app.UseWhen( context => context.Request.Query.ContainsKey("IsAuthorized"),
+    async app => 
+    {
+        app.Use( async(context, next) =>
+            {
+                await context.Response.WriteAsync("Middleware 4 called");
+                await next();
+            }
+        );
+    }
+);
+
+//Middleware 5
 app.Run( async (HttpContext context) =>
 {
-  await context.Response.WriteAsync("Middleware 4 called!\n\n");
+  await context.Response.WriteAsync("Middleware 5 called!\n\n");
 });
 
 app.Run();
