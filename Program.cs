@@ -1,4 +1,10 @@
+using Middleware.CustomMiddleware;
+
 var builder = WebApplication.CreateBuilder(args);
+
+//Register the custom middleware
+builder.Services.AddTransient<MyMiddleware>();
+
 var app = builder.Build();
 
 //Middleware1
@@ -15,10 +21,13 @@ app.Use( async (HttpContext context, RequestDelegate next) =>
   await next(context);
 });
 
-//Middleware3
+//Middleware 3
+app.UseMiddleware<MyMiddleware>();
+
+//Middleware 4
 app.Run( async (HttpContext context) =>
 {
-  await context.Response.WriteAsync("This is my first ASP.NET Core App!");
+  await context.Response.WriteAsync("This is my first ASP.NET Core App!\n\n");
 });
 
 app.Run();
